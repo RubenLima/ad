@@ -1,41 +1,48 @@
-
 using Gtk;
 using MySql.Data.MySqlClient;
 using System;
 
 public partial class MainWindow: Gtk.Window
-{
-	private ListStore listStore;
+{	
 	private MySqlConnection mySqlConnection;
+	private ListStore listStore;
+
 	public MainWindow (): base (Gtk.WindowType.Toplevel)
 	{
 		Build ();
 
+		deleteAction.Sensitive = false;
+
 		mySqlConnection = new MySqlConnection (
-			"DataSource=localhost;Database=dbprueba;User ID=root:Password=sistemas");
+			"DataSource=localhost;Database=dbprueba;User ID=root;Password=sistemas"
+			);
+
 		mySqlConnection.Open ();
 
-		//anyadir columnas
 		treeView.AppendColumn ("id", new CellRendererText (), "text", 0);
 		treeView.AppendColumn ("nombre", new CellRendererText (), "text", 1);
+		listStore = new ListStore (typeof(ulong), typeof(string));
+		treeView.Model = listStore;
 
-		 listStore = new ListStore (typeof(string), typeof(string));
+		fillListStore ();
 
-		treeView.Model = listStore; // en java seria treeView.setModel(listStore)
+		treeView.Selection.Changed += selectionChanged;
+	}
 
+	private void selectionChanged (object sender, EventArgs e) {
+		Console.WriteLine ("selectionChanged");
+		deleteAction.Sensitive = treeView.Selection.CountSelectedRows () > 0;
+	}
 
-
+	private void fillListStore() {
 		MySqlCommand mySqlCommand = mySqlConnection.CreateCommand ();
 		mySqlCommand.CommandText = "select * from categoria";
 
 		MySqlDataReader mySqlDataReader = mySqlCommand.ExecuteReader ();
 		while (mySqlDataReader.Read()) {
-		object id = mySqlDataReader ["id"].ToString();
-			// saber de que tipo es ,siguiente linea
-			Console.WriteLine ("id.GetType()={0}", id.GetType ());
-		object nombre = mySqlDataReader ["nombre"];
-			listStore.AppendValues (id,nombre);
-		
+			object id = mySqlDataReader ["id"];
+			object nombre = mySqlDataReader ["nombre"];
+			listStore.AppendValues (id, nombre);
 		}
 		mySqlDataReader.Close ();
 	}
@@ -46,66 +53,49 @@ public partial class MainWindow: Gtk.Window
 		Application.Quit ();
 		a.RetVal = true;
 	}
+
 	protected void OnAddActionActivated (object sender, EventArgs e)
 	{
-
 		string insertSql = string.Format(
-		 "insert into categoria(nombre) values ('{0}')," +
-			"nuevo" + DateTime.Now
-				);
-		Console.WriteLine ("Sql syntax error");//"insertSql ={0}",insertSql);
-		//MySqlCommand mySqlCommand = mySqlConnection.CreateCommand ();
-		//mySqlCommand.CommandText =insertSql;
-			// textView.Buffer.Clear();
+			"insert into categoria (nombre) values ('{0}')",
+			"Nuevo " + DateTime.Now
+			);
+		Console.WriteLine ("insertSql={0}", insertSql);
+		MySqlCommand mySqlCommand = mySqlConnection.CreateCommand ();
+		mySqlCommand.CommandText = insertSql;
+
+		mySqlCommand.ExecuteNonQuery ();
 	}
-
-
-
 
 	protected void OnRefreshActionActivated (object sender, EventArgs e)
 	{
-		listStore.Clear();
-		MySqlCommand mySqlCommand = mySqlConnection.CreateCommand ();
-		mySqlCommand.CommandText = "select * from categoria";
-
-		MySqlDataReader mySqlDataReader = mySqlCommand.ExecuteReader ();
-		while (mySqlDataReader.Read()) {
-			object id = mySqlDataReader ["id"].ToString();
-			// saber de que tipo es ,siguiente linea
-			Console.WriteLine ("id.GetType()={0}", id.GetType ());
-			object nombre = mySqlDataReader ["nombre"];
-			listStore.AppendValues (id,nombre);
-
-		}
-		mySqlDataReader.Close ();
-	}
-
-	private void selectionChanged (object sender,EventArgs e){
-
-		Console.WriteLine ("selectionChanged");
-	}
-	private void fillListStore(){
-
-
-		MySqlCommand mySqlCommand = mySqlConnection.CreateCommand ();
-		mySqlCommand.CommandText = "select * from categoria";
-
-		MySqlDataReader mySqlDataReader = mySqlCommand.ExecuteReader ();
-		while (mySqlDataReader.Read()) {
-			object id = mySqlDataReader ["id"].ToString ();
-			// saber de que tipo es ,siguiente linea
-			Console.WriteLine ("id.GetType()={0}", id.GetType ());
-			object nombre = mySqlDataReader ["nombre"];
-			listStore.AppendValues (id, nombre);
-
-
-
-		}
+		listStore.Clear ();
+		fillListStore ();
 	}
 
 	protected void OnDeleteActionActivated (object sender, EventArgs e)
 	{
-		throw new NotImplementedException ();
-	}
+		MessageDialog messageDialog = new MessageDialog (
+			this,
+			DialogFlags.Modal,
+			MessageType.Question,
+			ButtonsType.YesNo,
+			"¿Quieres eliminar el registro?"
+			);
+		messageDialog.Title = Title;
+		ResponseType response = (ResponseType) messageDialog.Run ();
+		messageDialog.Destroy ();
 
+		if (response != ResponseType.Yes)
+			return;
+
+		TreeIter treeIter;
+		treeView.Selection.GetSelected (out treeIter);
+		object id = listStore.GetValue (treeIter, 0);
+		string deleteSql = string.Format ("delete from categoria where id={0}", id);
+		MySqlCommand mySqlCommand = mySqlConnection.CreateCommand ();
+		mySqlCommand.CommandText = deleteSql;
+
+		mySqlCommand.ExecuteNonQuery ();
+	}
 }
