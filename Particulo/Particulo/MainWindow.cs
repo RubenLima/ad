@@ -7,35 +7,69 @@ using SerpisAd;
 public partial class MainWindow: Gtk.Window
 {	
 	private IDbConnection dbConnection;
-	private ListStore listStore;
+	private ListStore categoriaListStore;
 
 	public MainWindow (): base (Gtk.WindowType.Toplevel)
 	{
 		Build ();
 
-		deleteAction.Sensitive = false;
-		editAction.Sensitive = false;
+
+		categoriaDeleteAction.Sensitive = false;
+
+		categoriaEditAction.Sensitive = false;
+
 
 		dbConnection = App.Instance.DbConnection;
 
-		treeView.AppendColumn ("id", new CellRendererText (), "text", 0);
-		treeView.AppendColumn ("nombre", new CellRendererText (), "text", 1);
-		listStore = new ListStore (typeof(ulong), typeof(string));
-		treeView.Model = listStore;
 
-		fillListStore ();
 
-		treeView.Selection.Changed += selectionChanged;
+		categoriaTreeView.AppendColumn ("id", new CellRendererText (), "text", 0);
+		categoriaTreeView.AppendColumn ("nombre", new CellRendererText (), "text", 1);
+		categoriaListStore = new ListStore (typeof(ulong), typeof(string));
+		categoriaTreeView.Model = categoriaListStore;
+
+
+		fillCategoriaListStore ();
+
+
+		categoriaTreeView.Selection.Changed += categoriaSelectionChanged;
+
+
+
+		categoriaRefreshAction.Activated += delegate{
+			categoriaListStore.Clear();
+			fillCategoriaListStore();
+		};
+		// todo resto de actions
 	}
 
-	private void selectionChanged (object sender, EventArgs e) {
+
+
+
+	private void categoriaSelectionChanged (object sender, EventArgs e) {
 		Console.WriteLine ("selectionChanged");
-		bool hasSelected = treeView.Selection.CountSelectedRows () > 0;
-		deleteAction.Sensitive = hasSelected;
-		editAction.Sensitive = hasSelected;
+		bool hasSelected = categoriaTreeView.Selection.CountSelectedRows () > 0;
+		categoriaDeleteAction.Sensitive = hasSelected;
+		categoriaEditAction.Sensitive = hasSelected;
+	}
+	private void fillArticuloListStore() {
+		IDbCommand dbCommand = dbConnection.CreateCommand ();
+		dbCommand.CommandText = "select a.id,a.nombre,c.nombre as categoria,a.precio " + 
+			" from articulo a left join categoria c on (a.categoria = c.id");
+
+		IDataReader dataREader = dbCommand.ExecuteReader ();
+		while (dataReader.Read()) {
+		object id = dataReader ["id"];
+			object nombre = dataReader ["nombre"];
+		object categoria = dataReader ["categoria"].ToString();
+		object precio = dataReader ["precio"].ToString();	
+
+		articuloListStore.AppendValues (id, nombre,categoria,precio);
+		}
+		dataReader.Close ();
 	}
 
-	private void fillListStore() {
+	private void fillCategoriaListStore() {
 		IDbCommand dbCommand = dbConnection.CreateCommand ();
 		dbCommand.CommandText = "select * from categoria";
 
@@ -43,7 +77,7 @@ public partial class MainWindow: Gtk.Window
 		while (dataReader.Read()) {
 			object id = dataReader ["id"];
 			object nombre = dataReader ["nombre"];
-			listStore.AppendValues (id, nombre);
+			categoriaListStore.AppendValues (id, nombre);
 		}
 		dataReader.Close ();
 	}
@@ -92,7 +126,7 @@ public partial class MainWindow: Gtk.Window
 
 
 		TreeIter treeIter;
-		treeView.Selection.GetSelected (out treeIter);
+		articuloTreeView.Selection.GetSelected (out treeIter);
 		object id = listStore.GetValue (treeIter, 0);
 		string deleteSql = string.Format ("delete from categoria where id={0}", id);
 		IDbCommand dbCommand = dbConnection.CreateCommand ();
@@ -104,8 +138,15 @@ public partial class MainWindow: Gtk.Window
 	protected void OnEditActionActivated (object sender, EventArgs e)
 	{
 		TreeIter treeIter;
-		treeView.Selection.GetSelected (out treeIter);
+		articuloTreeView.Selection.GetSelected (out treeIter);
 		object id = listStore.GetValue (treeIter, 0);
 		CategoriaView categoriaView = new CategoriaView (id);
 	}
+	protected void OnArticuloRefreshActionActivated (object sender, EventArgs e)
+	{
+		throw new NotImplementedException ();
+	}
+
+
+
 }

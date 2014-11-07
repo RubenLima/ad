@@ -3,7 +3,7 @@ using MySql.Data.MySqlClient;
 using System;
 using SerpisAd;
 
-namespace PCategoria
+namespace PArticulo
 {
 	class MainClass
 	{
