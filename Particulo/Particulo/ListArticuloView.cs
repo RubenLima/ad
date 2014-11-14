@@ -38,6 +38,10 @@ namespace Particulo
 			fillListStore();
 		};
 
+		ediatAction.Activated += delegate{
+
+			new ArticuloView ();
+		}
 
 		// todo resto de actions
 	}

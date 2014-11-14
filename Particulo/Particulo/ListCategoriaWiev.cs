@@ -44,6 +44,8 @@ namespace Particulo
 				listStore.Clear();
 				fillListStore();
 			};
+
+
 		}
 
 		private void selectionChanged (object sender, EventArgs e) {

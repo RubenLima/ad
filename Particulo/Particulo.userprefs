@@ -1,11 +1,13 @@
 ﻿<Properties>
   <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug|x86" />
-  <MonoDevelop.Ide.Workbench ActiveDocument="Particulo/ListArticuloView.cs">
+  <MonoDevelop.Ide.Workbench ActiveDocument="Particulo/ArticuloView.cs">
     <Files>
-      <File FileName="Particulo/Program.cs" Line="6" Column="20" />
-      <File FileName="Particulo/MainWindow.cs" Line="69" Column="21" />
-      <File FileName="Particulo/Properties/ArticuloWiev.cs" Line="38" Column="4" />
-      <File FileName="Particulo/ListArticuloView.cs" Line="26" Column="21" />
+      <File FileName="Particulo/Program.cs" Line="1" Column="1" />
+      <File FileName="Particulo/MainWindow.cs" Line="1" Column="1" />
+      <File FileName="Particulo/Properties/ArticuloWiev.cs" Line="1" Column="1" />
+      <File FileName="Particulo/ListArticuloView.cs" Line="1" Column="1" />
+      <File FileName="Particulo/ListCategoriaWiev.cs" Line="1" Column="1" />
+      <File FileName="Particulo/ArticuloView.cs" Line="11" Column="4" />
     </Files>
   </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.DebuggingService.Breakpoints>

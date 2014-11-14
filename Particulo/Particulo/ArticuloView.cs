@@ -8,6 +8,7 @@ namespace Particulo
 				base(Gtk.WindowType.Toplevel)
 		{
 			this.Build ();
+
 		}
 	}
 }
