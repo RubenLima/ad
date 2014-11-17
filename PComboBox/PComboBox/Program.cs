@@ -1,5 +1,7 @@
 using System;
 using Gtk;
+using MySql.Data.MySqlClient;
+using Pserpisad;
 
 namespace PComboBox
 {
