@@ -2,6 +2,7 @@ using System;
 
 namespace PReflection
 {
+	[Entity]
 	public class Articulo
 	{
 		public ulong Id { get; set;}

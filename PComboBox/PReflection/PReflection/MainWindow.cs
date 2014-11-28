@@ -8,10 +8,25 @@ public partial class MainWindow: Gtk.Window
 	{
 		Build ();
 
-		showInfo(typeof(Categoria));
-		showInfo(typeof(Articulo));
+		//showInfo(typeof(Categoria));
+		//showInfo(typeof(Articulo));
 		//showInfo(typeof(Button));
-		Categoria categoria = new Categoria (33, "treintaytres");
+
+		Type type = typeof(MainWindow);
+		Assembly assembly = type.Assembly;
+		foreach(Type type in assembly.GetTypes())
+			if(type.IsDefined(typeof(EntityAttribute),true))
+		        Console.WriteLine("type.Name={0}", Type.Name);
+		EntityAttribute etityAttribute=(EntityAttribute)
+			Attribute.GetCustomAttribute(type,typeof(EntityAttribute));
+		entityAttribute.TableName;
+		//Console.WriteLine("type.Name={0} entityAttribute.TableName={1}"
+		                 // , Type.Name,entityAttribute.TableName);
+		Console.WriteLine("type.Name={0},Type.name);
+
+
+		Categoria categoria = new Categoria (33, "");
+		
 		showValues (categoria);
 		//Type type = typeof(Categoria);
 
@@ -19,6 +34,16 @@ public partial class MainWindow: Gtk.Window
 				
 
 		}
+
+private void validate(object obj){
+ErrorInfo[] erroInfos = Validator.Validate(categoria);
+if(errosInfos.Length==0)
+Combo.WriteLine("sin errores");
+foreach(ErrorInfo errorInfo in errorInfos)
+Console.WriteLine("property = {0} message ={1}",erroInfo.Property, errorInfo.Message);
+
+
+}
 
 	private void showValues(object obj){
 	

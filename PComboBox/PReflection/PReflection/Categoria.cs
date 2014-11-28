@@ -2,11 +2,12 @@ using System;
 
 namespace PReflection
 {
+	[Entity(TableName="category")]
 	public class Categoria
 	{
 
 		public Categoria(ulong id , string nombre){
-			this.id = id;
+			this.Id = id;
 			this.Nombre = nombre;
 		}
 		[Id]
