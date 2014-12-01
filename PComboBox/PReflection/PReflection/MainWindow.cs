@@ -26,6 +26,8 @@ public partial class MainWindow: Gtk.Window
 
 
 		Categoria categoria = new Categoria (33, "");
+//validate.categoria=
+//categoria.Nombre="Algo";
 		
 		showValues (categoria);
 		//Type type = typeof(Categoria);
