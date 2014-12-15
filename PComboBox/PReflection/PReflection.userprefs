@@ -1,17 +1,17 @@
 ﻿<Properties>
   <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug|x86" />
-  <MonoDevelop.Ide.Workbench ActiveDocument="PReflection/Categoria.cs">
+  <MonoDevelop.Ide.Workbench ActiveDocument="PReflection/MainWindow.cs">
     <Files>
       <File FileName="PReflection/Program.cs" Line="1" Column="1" />
-      <File FileName="PReflection/MainWindow.cs" Line="43" Column="48" />
+      <File FileName="PReflection/MainWindow.cs" Line="30" Column="3" />
       <File FileName="PReflection/Categoria.cs" Line="11" Column="20" />
-      <File FileName="PReflection/Articulo.cs" Line="5" Column="10" />
-      <File FileName="PReflection/Properties/IdAttribute.cs" Line="5" Column="36" />
-      <File FileName="PReflection/EntityAttribute.cs" Line="8" Column="53" />
+      <File FileName="PReflection/Articulo.cs" Line="1" Column="1" />
+      <File FileName="PReflection/Properties/IdAttribute.cs" Line="1" Column="1" />
+      <File FileName="PReflection/EntityAttribute.cs" Line="1" Column="1" />
       <File FileName="PReflection/ValidationAttribute.cs" Line="7" Column="47" />
       <File FileName="PReflection/NotBlankAttribute.cs" Line="15" Column="16" />
-      <File FileName="PReflection/ErrorInfo.cs" Line="10" Column="27" />
-      <File FileName="PReflection/Validator.cs" Line="21" Column="8" />
+      <File FileName="PReflection/ErrorInfo.cs" Line="1" Column="1" />
+      <File FileName="PReflection/Validator.cs" Line="16" Column="62" />
     </Files>
   </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.DebuggingService.Breakpoints>
