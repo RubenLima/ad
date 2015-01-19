@@ -6,4 +6,6 @@ mavenCentral()
 }
 dependencies {
 'mysql:mysql-connector-java:5.1.28'
+compile'org,hubernate:hibernate-core:4.3.8.Final'
+ compile'org,hubernate:hibernate-entitymanager:4.3.7.Final'
 }
